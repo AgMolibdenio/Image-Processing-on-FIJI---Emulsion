@@ -1,35 +1,37 @@
-//Macro de contagem de gotas em emulsões
+//Macro: drop acount in Emulsions
 
-//Plugin retorna: Área, perímetro e diametro max e min
-//Será dado: Uma tabela de resumo 
-//           Uma tabela com os dados
-//           Uma máscara com as contagens feitas
-//           A imagem tratada
+//Plugin return: Area, perimeter and diameter max e min
+//Input: Your imag
+//Output: A summary table 
+//        A data tabela
+//        A makk with de drops acounted by Fiji
+//        The processed image
 
 run("RGB Color");
+//Remember to set your scale in "knowm ="
 run("Set Scale...", "distance=1 known=0.06815 unit=µm global");
 
-//Pré tratamento
+//Pré-treatment
 run("Median...", "radius=3");
 run("Unsharp Mask...", "radius=5 mask=0.8");
 run("Median...", "radius=3");
 run("8-bit");
 
-//Segmentação
+//Processing - evaluate the Threshold method
 setAutoThreshold("Default dark no-reset");
 setOption("BlackBackground", true);
 run("Convert to Mask");
 //setAutoThreshold("Huang dark no-reset");
 //run("Convert to Mask");
 
-//Pós tratamento
+//Post-Prossecing
 //run("Dilate");
 run("Erode");
 run("Dilate");
 
-//Análise e aquisição de dados
+//Data aquisition
 run("Set Measurements...", "area perimeter feret's redirect=None decimal=3");
 run("Analyze Particles...", 
 	"size=0.07-Infinity circularity=0.80-1.00 show=Outlines display exclude clear summarize");
 	
-//Obs: Avaliar se o método foi bom para sua imagem
+//Obs: Compare the mask, the processed and the original image and evaluate if the method is good
